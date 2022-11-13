@@ -2,7 +2,7 @@
     /*definitions section*/
 %}
 
-kewords "int"|"float"|"double"|"boolean"|"char"|"String"|"const"|"if"|"else"
+kewords "int"|"float"|"double"|"boolean"|"char"|"String"|"const"|"if"|"else"|"while"|"for"|"System"|"out"|"print"|"printLn"|"class"
 
 latters [a-zA-Z]
 
@@ -12,7 +12,12 @@ numbers {digits}+
 
 id {latters}({latters}|{digits})*
 
-operators "+"|"-"|"*"|"/"|"+="|"-="|"*="|"/="|"="|"=="|"!="|">"|"<"|">="|"<="|"&&"|"||"
+/*operators "+"|"-"|"*"|"/"|"+="|"-="|"*="|"/="|"="|"=="|"!="|">"|"<"|">="|"<="|"&&"|"||"*/
+
+arithmeticOperators "+"|"-"|"*"|"%"|"/"|"="|"++"|"--"
+assignmentOperators "+="|"-="|"*="|"%="|"/="|"|="|"&="
+comparisonOperators "=="|"!="|">"|"<"|">="|"<="
+logicalOperators "&&"|"||"|"!"
 
 separators "["|"]"|"{"|"}"|"("|")"|";"|","|"."
 
@@ -29,7 +34,10 @@ lineComment ("//"({id}|{ws}|{numbers}|"\n"))
 {ws} {printf("white space \n");}
 {id} {printf("idint %s \n",yytext);}
 {numbers} {printf("numbers %d \n",yylex);}
-{operators} {printf("operator %s \n",yytext);}
+{arithmeticOperators} {printf("arithmetic Operators %s \n",yytext);}
+{assignmentOperators} {printf("assignment Operators %s \n",yytext);}
+{comparisonOperators} {printf("comparison Operators %s \n",yytext);}
+{logicalOperators} {printf("logical Operators %s \n",yytext);}
 {separators} {printf("separator %s \n",yytext);}
 {comment} {printf("multi line comment %s \n",yytext);}
 {lineComment} {printf("line comment %s \n",yytext);}
