@@ -1,8 +1,11 @@
 %{
     /*definitions section*/
+    #include<stdio.h>
+    #include<ctype.h>
+    //int line=0;
 %}
 
-kewords "int"|"float"|"double"|"boolean"|"char"|"String"|"const"|"if"|"else"|"while"|"for"|"System"|"out"|"print"|"printLn"|"class"
+kewords "int"|"float"|"double"|"boolean"|"char"|"String"|"const"|"void"|"if"|"else"|"while"|"for"|"System"|"out"|"print"|"printLn"|"class"|"public"|"static"
 
 latters [a-zA-Z]
 
@@ -27,7 +30,6 @@ comment ("/*"({id}|{ws}|{numbers}|"\n")"*/")
 
 lineComment ("//"({id}|{ws}|{numbers}|"\n"))
 
-
 /*Rules Section*/
 %%
 {kewords} {printf("keword %s \n",yytext);}
@@ -41,6 +43,7 @@ lineComment ("//"({id}|{ws}|{numbers}|"\n"))
 {separators} {printf("separator %s \n",yytext);}
 {comment} {printf("multi line comment %s \n",yytext);}
 {lineComment} {printf("line comment %s \n",yytext);}
+. {printf("??");}
 \n {printf("new line \n");}
 %%
 
@@ -48,7 +51,19 @@ int yywrap(){
     exit(0);
 }
 
-int main(){
-    printf("Start here:  ");
+void main(int argc, char **argv)
+{
+    if (argc > 1){
+        for(int i=0;i<argc;i++)
+            printf("value of argv[%d] = %s\n\n",i,argv[i]);
+            yyin=fopen(argv[1],"r");
+    }  
+    else
+        yyin=stdin;
     yylex();
 }
+
+/*int main(){
+    printf("Start here:  ");
+    yylex();
+}*/
