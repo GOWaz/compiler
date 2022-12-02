@@ -1,0 +1,14 @@
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello");
+        int[] arrr = new int[10];
+        if(arr[0]<10)
+        {
+            System.out.println("true");
+        
+        }else
+         System.out.println("false");
+        /* this is a multi line comment */
+        //this is a line comment
+    }
+}

@@ -26,13 +26,22 @@ assignmentOperators "+="|"-="|"*="|"%="|"/="|"|="|"&="
 comparisonOperators "=="|"!="|">"|"<"|">="|"<="
 logicalOperators "&&"|"||"|"!"
 
+operators {arithmeticOperators}|{assignmentOperators}|{comparisonOperators}|{logicalOperators}
+
 separators "["|"]"|"{"|"}"|"("|")"|";"|","|"."
 
 ws [ \t\r\u]+
 
-comment ("/*"({id}|{ws}|{numbers}|"\n")"*/")
+multiLineComment ("/*"({id}|{ws}|{numbers}|"\n")"*/")
 
 lineComment ("//"({id}|{ws}|{numbers}|"\n"))
+
+comment {multiLineComment}|{lineComment}
+
+/*{arithmeticOperators} {printf("arithmetic Operators %s in line %d \n",yytext,line);}*/
+/*{assignmentOperators} {printf("assignment Operators %s in line %d \n",yytext,line);}*/
+/*{comparisonOperators} {printf("comparison Operators %s in line %d \n",yytext,line);}*/
+/*{logicalOperators} {printf("logical Operators %s in line %d \n",yytext,line);}*/
 
 /*Rules Section*/
 %%
@@ -41,15 +50,11 @@ lineComment ("//"({id}|{ws}|{numbers}|"\n"))
 {arrays} {printf("array %s in line %d ",yytext,line);}
 {ws} {printf("white space in line %d \n",line);}
 {id} {printf("idint %s in line %d \n",yytext,line);}
-{numbers} {printf("numbers %d in line %d \n",yylex,line);}
-{arithmeticOperators} {printf("arithmetic Operators %s in line %d \n",yytext,line);}
-{assignmentOperators} {printf("assignment Operators %s in line %d \n",yytext,line);}
-{comparisonOperators} {printf("comparison Operators %s in line %d \n",yytext,line);}
-{logicalOperators} {printf("logical Operators %s in line %d \n",yytext,line);}
+{numbers} {printf("numbers %d in line %d \n",yytext,line);}
+{operators} {printf("operator %s in line %d",yytext,line);}
 {separators} {printf("separator %s in line %d \n",yytext,line);}
-{comment} {printf("multi line comment %s in line %d \n",yytext,line);}
-{lineComment} {printf("line comment %s in line %d \n",yytext,line);}
-. {printf("?? in line %d \n",line);}
+{comment} {printf("comment %s in line %d \n",yytext,line);}
+. {printf("Error?? in line %d \n",line);}
 \n {printf("new line \n");line++;}
 %%
 
