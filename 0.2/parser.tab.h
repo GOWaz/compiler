@@ -40,11 +40,13 @@
       know about them.  */
    enum yytokentype {
      NUMBER = 258,
-     PLUS = 259,
-     MINUS = 260,
-     MULTIPLY = 261,
-     DEVIDE = 262,
-     EOL = 263
+     ID = 259,
+     INT = 260,
+     FLOAT = 261,
+     CHAR = 262,
+     LONG = 263,
+     VOID = 264,
+     EOL = 265
    };
 #endif
 
@@ -55,15 +57,15 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 5 "parser.y"
+#line 8 "parser.y"
 
     int number;
-    char charcter;
+    char string;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 67 "parser.tab.h"
+#line 69 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

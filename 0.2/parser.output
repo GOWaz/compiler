@@ -1,116 +1,300 @@
 Terminals unused in grammar
 
-   MINUS
-   MULTIPLY
-   DEVIDE
+   NUMBER
 
 
-State 8 conflicts: 1 shift/reduce
+State 11 conflicts: 1 shift/reduce
+State 12 conflicts: 1 shift/reduce
 
 
 Grammar
 
-    0 $accept: input $end
+    0 $accept: function $end
 
-    1 input: exp EOL
-    2      | EOL
+    1 function: type ID '(' ')' EOL
+    2         | type ID '(' listOfArgs ')' EOL
+    3         | VOID ID '(' ')' EOL
+    4         | VOID ID '(' listOfArgs ')' EOL
 
-    3 exp: NUMBER
-    4    | exp PLUS exp
+    5 listOfArgs: /* empty */
+    6           | arg
+    7           | listOfArgs ',' arg
+
+    8 arg: type ID
+
+    9 type: INT
+   10     | LONG
+   11     | FLOAT
+   12     | CHAR
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
+'(' (40) 1 2 3 4
+')' (41) 1 2 3 4
+',' (44) 7
 error (256)
-NUMBER (258) 3
-PLUS (259) 4
-MINUS (260)
-MULTIPLY (261)
-DEVIDE (262)
-EOL (263) 1 2
+NUMBER (258)
+ID (259) 1 2 3 4 8
+INT (260) 9
+FLOAT (261) 11
+CHAR (262) 12
+LONG (263) 10
+VOID (264) 3 4
+EOL (265) 1 2 3 4
 
 
 Nonterminals, with rules where they appear
 
-$accept (9)
+$accept (14)
     on left: 0
-input (10)
-    on left: 1 2, on right: 0
-exp (11)
-    on left: 3 4, on right: 1 4
+function (15)
+    on left: 1 2 3 4, on right: 0
+listOfArgs (16)
+    on left: 5 6 7, on right: 2 4 7
+arg (17)
+    on left: 8, on right: 6 7
+type (18)
+    on left: 9 10 11 12, on right: 1 2 8
 
 
 state 0
 
-    0 $accept: . input $end
+    0 $accept: . function $end
 
-    NUMBER  shift, and go to state 1
-    EOL     shift, and go to state 2
+    INT    shift, and go to state 1
+    FLOAT  shift, and go to state 2
+    CHAR   shift, and go to state 3
+    LONG   shift, and go to state 4
+    VOID   shift, and go to state 5
 
-    input  go to state 3
-    exp    go to state 4
+    function  go to state 6
+    type      go to state 7
 
 
 state 1
 
-    3 exp: NUMBER .
+    9 type: INT .
 
-    $default  reduce using rule 3 (exp)
+    $default  reduce using rule 9 (type)
 
 
 state 2
 
-    2 input: EOL .
+   11 type: FLOAT .
 
-    $default  reduce using rule 2 (input)
+    $default  reduce using rule 11 (type)
 
 
 state 3
 
-    0 $accept: input . $end
+   12 type: CHAR .
 
-    $end  shift, and go to state 5
+    $default  reduce using rule 12 (type)
 
 
 state 4
 
-    1 input: exp . EOL
-    4 exp: exp . PLUS exp
+   10 type: LONG .
 
-    PLUS  shift, and go to state 6
-    EOL   shift, and go to state 7
+    $default  reduce using rule 10 (type)
 
 
 state 5
 
-    0 $accept: input $end .
+    3 function: VOID . ID '(' ')' EOL
+    4         | VOID . ID '(' listOfArgs ')' EOL
 
-    $default  accept
+    ID  shift, and go to state 8
 
 
 state 6
 
-    4 exp: exp PLUS . exp
+    0 $accept: function . $end
 
-    NUMBER  shift, and go to state 1
-
-    exp  go to state 8
+    $end  shift, and go to state 9
 
 
 state 7
 
-    1 input: exp EOL .
+    1 function: type . ID '(' ')' EOL
+    2         | type . ID '(' listOfArgs ')' EOL
 
-    $default  reduce using rule 1 (input)
+    ID  shift, and go to state 10
 
 
 state 8
 
-    4 exp: exp . PLUS exp
-    4    | exp PLUS exp .
+    3 function: VOID ID . '(' ')' EOL
+    4         | VOID ID . '(' listOfArgs ')' EOL
 
-    PLUS  shift, and go to state 6
+    '('  shift, and go to state 11
 
-    PLUS      [reduce using rule 4 (exp)]
-    $default  reduce using rule 4 (exp)
+
+state 9
+
+    0 $accept: function $end .
+
+    $default  accept
+
+
+state 10
+
+    1 function: type ID . '(' ')' EOL
+    2         | type ID . '(' listOfArgs ')' EOL
+
+    '('  shift, and go to state 12
+
+
+state 11
+
+    3 function: VOID ID '(' . ')' EOL
+    4         | VOID ID '(' . listOfArgs ')' EOL
+
+    INT    shift, and go to state 1
+    FLOAT  shift, and go to state 2
+    CHAR   shift, and go to state 3
+    LONG   shift, and go to state 4
+    ')'    shift, and go to state 13
+
+    ')'       [reduce using rule 5 (listOfArgs)]
+    $default  reduce using rule 5 (listOfArgs)
+
+    listOfArgs  go to state 14
+    arg         go to state 15
+    type        go to state 16
+
+
+state 12
+
+    1 function: type ID '(' . ')' EOL
+    2         | type ID '(' . listOfArgs ')' EOL
+
+    INT    shift, and go to state 1
+    FLOAT  shift, and go to state 2
+    CHAR   shift, and go to state 3
+    LONG   shift, and go to state 4
+    ')'    shift, and go to state 17
+
+    ')'       [reduce using rule 5 (listOfArgs)]
+    $default  reduce using rule 5 (listOfArgs)
+
+    listOfArgs  go to state 18
+    arg         go to state 15
+    type        go to state 16
+
+
+state 13
+
+    3 function: VOID ID '(' ')' . EOL
+
+    EOL  shift, and go to state 19
+
+
+state 14
+
+    4 function: VOID ID '(' listOfArgs . ')' EOL
+    7 listOfArgs: listOfArgs . ',' arg
+
+    ')'  shift, and go to state 20
+    ','  shift, and go to state 21
+
+
+state 15
+
+    6 listOfArgs: arg .
+
+    $default  reduce using rule 6 (listOfArgs)
+
+
+state 16
+
+    8 arg: type . ID
+
+    ID  shift, and go to state 22
+
+
+state 17
+
+    1 function: type ID '(' ')' . EOL
+
+    EOL  shift, and go to state 23
+
+
+state 18
+
+    2 function: type ID '(' listOfArgs . ')' EOL
+    7 listOfArgs: listOfArgs . ',' arg
+
+    ')'  shift, and go to state 24
+    ','  shift, and go to state 21
+
+
+state 19
+
+    3 function: VOID ID '(' ')' EOL .
+
+    $default  reduce using rule 3 (function)
+
+
+state 20
+
+    4 function: VOID ID '(' listOfArgs ')' . EOL
+
+    EOL  shift, and go to state 25
+
+
+state 21
+
+    7 listOfArgs: listOfArgs ',' . arg
+
+    INT    shift, and go to state 1
+    FLOAT  shift, and go to state 2
+    CHAR   shift, and go to state 3
+    LONG   shift, and go to state 4
+
+    arg   go to state 26
+    type  go to state 16
+
+
+state 22
+
+    8 arg: type ID .
+
+    $default  reduce using rule 8 (arg)
+
+
+state 23
+
+    1 function: type ID '(' ')' EOL .
+
+    $default  reduce using rule 1 (function)
+
+
+state 24
+
+    2 function: type ID '(' listOfArgs ')' . EOL
+
+    EOL  shift, and go to state 27
+
+
+state 25
+
+    4 function: VOID ID '(' listOfArgs ')' EOL .
+
+    $default  reduce using rule 4 (function)
+
+
+state 26
+
+    7 listOfArgs: listOfArgs ',' arg .
+
+    $default  reduce using rule 7 (listOfArgs)
+
+
+state 27
+
+    2 function: type ID '(' listOfArgs ')' EOL .
+
+    $default  reduce using rule 2 (function)

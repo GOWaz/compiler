@@ -1,24 +1,37 @@
 %{
     #include <stdio.h>
     #include <ctype.h>
+    extern int yylex();
+    extern FILE *yyin;
+    int yyerror(const char *s);
 %}
 %union{
     int number;
-    char charcter;
+    char *string;
 }
 
 %token<number> NUMBER 
-%type<number> exp
-%token PLUS MINUS MULTIPLY DEVIDE
-%token EOL 
+%token ID
+%token INT FLOAT CHAR LONG VOID
+%token EOL
+
 
 %%
-input : 
-      exp EOL {printf("%d \n",$1);}
-    | EOL;
-exp:  NUMBER {$$ = $1;}
-    | exp PLUS exp {$$ = $1 + $3;}
-    ;
+function: type ID '(' ')' EOL {printf("\naccepted without args");}
+  | type ID '(' listOfArgs ')' EOL {printf("\naccepted with args");}
+  | VOID ID '(' ')' EOL {printf("\naccepted void func without args");}
+  | VOID ID '(' listOfArgs ')' EOL {printf("\naccepted void func with args");}
+  ;
+
+listOfArgs: { }
+  | arg { }
+  | listOfArgs ',' arg { }
+  ;
+
+arg: type ID ;
+
+type: INT | LONG | FLOAT | CHAR ;
+
 %%
 /**/
 int main(int argc, char **argv)
@@ -29,6 +42,6 @@ int main(int argc, char **argv)
 
 int yyerror(const char *s)
 {
-  fprintf(stderr, "error!: %s\n", s);
+  fprintf(stderr, "error!: %s \n", s);
   return 0;
 }
