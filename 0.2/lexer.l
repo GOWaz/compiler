@@ -1,10 +1,16 @@
 D			[0-9]
 L			[a-zA-Z_]
+S           [a-z]
 
 %{
     #include "parser.tab.h"
+	    
+   	int yylex (void);
+  	int yyerror (char const *);
+
     int yywrap();
     void count(void);
+    extern int yylval;
 %}
 
 %%
@@ -13,21 +19,42 @@ L			[a-zA-Z_]
 "char"			{ count(); return(CHAR); }
 "long"			{ count(); return(LONG); }
 "void"			{ count(); return(VOID); }
-
-{D}+ {count(); yylval.number = atoi(yytext); return (NUMBER);}
-
-{L}({L}|{D})* {count(); return (ID);}
+"for"			{ count(); return(FOR); }
+"if"            {count(); return IF;}
+"else"          {count(); return ELSE;}
+"return"        {count(); return RETURN;}
 
 ","			{ count(); return (','); }
 "("         { count(); return ('('); }
 ")"         { count(); return (')'); }
 "="			{ count(); return ('='); }
+"{"			{ count(); return ('{'); }
+"}"			{ count(); return ('}'); }
+">"			{ count(); return ('>'); }
+"<"			{ count(); return ('<'); }
+"+"			{ count(); return ('+'); }
+"-"			{ count(); return ('-'); }
+"/"			{ count(); return ('/'); }
+"*"			{ count(); return ('*'); }
 
 ";" {return (EOL);}
+
+{D}+ {count(); yylval = atoi(yytext); return (NUMBER);}
+{L}({L}|{D})* {count(); return (ID);}
+
+
+
+
+[-+/*<>=,():;{}|&!%^] 	{
+		   count();
+			yylval = yytext[0];
+			return *yytext;
+		}
 
 [ \t \n] { }
 
 . {printf("error at %s \n",yytext);}
+
 
 %%
 
